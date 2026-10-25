@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero-section">
+    <div class="hero-logo-container">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="MediPulse AI Logo" class="hero-logo-img">
+    </div>
+    <h1>Your Intelligent Health Awareness Companion</h1>
+    <p>Explore symptoms, verify facts, manage preventive care, and chat with HealthGPT.</p>
+</div>
+
+<div class="dashboard-wrapper">
+    <div class="tabs-sidebar">
+        <button class="tab-btn active" data-target="healthsense-tab">🩺 HealthSense AI</button>
+        <button class="tab-btn" data-target="healthgpt-tab">💬 HealthGPT</button>
+        <button class="tab-btn" data-target="prevent360-tab">🛡️ Prevent360 AI</button>
+        <button class="tab-btn" data-target="truthcheck-tab">🔍 TruthCheck AI</button>
+        <button class="tab-btn" data-target="medisafe-tab">💊 MediSafe AI</button>
+    </div>
+
+    <div class="tab-content-area">
+        
+        <!-- HealthSense AI -->
+        <div id="healthsense-tab" class="tab-pane active">
+            <h2>HealthSense AI</h2>
+            <p>Enter your symptoms to receive a health awareness report.</p>
+            <form id="healthsense-form" class="ai-form">
+                <textarea id="hs-symptoms" placeholder="E.g., Mild fever, continuous headache for 2 days..." required></textarea>
+                <button type="submit" class="primary-btn">Analyze Symptoms</button>
+            </form>
+            <div id="hs-loader" class="loader hidden">Processing with AI...</div>
+            <div id="hs-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- HealthGPT -->
+        <div id="healthgpt-tab" class="tab-pane hidden">
+            <h2>HealthGPT</h2>
+            <div class="chat-window">
+                <div id="chat-messages" class="chat-messages"></div>
+                <div id="chat-loader" class="loader hidden">AI is typing...</div>
+                <form id="healthgpt-form" class="chat-input-form">
+                    <input type="text" id="chat-input" placeholder="Ask a health-related question..." autocomplete="off" required>
+                    <button type="submit" class="primary-btn">Send</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Prevent360 AI -->
+        <div id="prevent360-tab" class="tab-pane hidden">
+            <h2>Prevent360 AI</h2>
+            <form id="prevent-form" class="ai-form">
+                <input type="text" id="prevent-focus" placeholder="E.g., Heart health, Better sleep, Immunity..." required>
+                <button type="submit" class="primary-btn">Generate Plan</button>
+            </form>
+            <div id="prevent-loader" class="loader hidden">Generating Preventive Care Plan...</div>
+            <div id="prevent-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- TruthCheck AI -->
+        <div id="truthcheck-tab" class="tab-pane hidden">
+            <h2>TruthCheck AI</h2>
+            <form id="truthcheck-form" class="ai-form">
+                <input type="text" id="truth-query" placeholder="E.g., Does cold weather cause fever?" required>
+                <button type="submit" class="primary-btn">Verify Medical Fact</button>
+            </form>
+            <div id="truth-loader" class="loader hidden">Searching Scientific Sources...</div>
+            <div id="truth-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- MediSafe AI -->
+        <div id="medisafe-tab" class="tab-pane hidden">
+            <h2>MediSafe AI</h2>
+            <form id="medisafe-form" class="ai-form">
+                <input type="text" id="medicine-name" placeholder="E.g., Paracetamol, Amoxicillin..." required>
+                <button type="submit" class="primary-btn">Check Medicine Safety</button>
+            </form>
+            <div id="medisafe-loader" class="loader hidden">Retrieving Safety Data...</div>
+            <div id="medisafe-result" class="result-box hidden"></div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
