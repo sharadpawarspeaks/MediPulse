@@ -1,6 +1,7 @@
 import os
 import json
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from utils import extract_json, append_disclaimer, logger
 import prompt_templates as prompts
@@ -9,18 +10,43 @@ from rag_engine import RAGEngine
 
 class AIEngine:
     def __init__(self):
-        api_key = os.getenv("GROQ_API_KEY")
-        
-        if not api_key:
-            logger.warning("GROQ_API_KEY is not set.")
-            
-        # Initialize GPT-OSS-20B via Groq compatible endpoint
-        self.llm = ChatGroq(
-            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
-            api_key=api_key or "gsk_placeholder_key",
-            temperature=0.3,
-            max_tokens=6000
-        )
+        gemma_key = os.getenv("GEMMA_API_KEY") or os.getenv("APIM_API_KEY")
+        gemma_endpoint = os.getenv("GEMMA_ENDPOINT") or os.getenv("APIM_ENDPOINT")
+        model_name = os.getenv("GEMMA_MODEL_NAME", "gemma-4-26b-a4b-it")
+        groq_key = os.getenv("GROQ_API_KEY")
+
+        # Prioritize Gemma 4 26B A4B IT
+        if gemma_key or gemma_endpoint or not groq_key:
+            if not gemma_key:
+                logger.warning("GEMMA_API_KEY is not set in .env.")
+            else:
+                logger.info(f"Initialized Gemma model: {model_name}")
+
+            headers = {}
+            if gemma_key:
+                headers["api-key"] = gemma_key
+                headers["Ocp-Apim-Subscription-Key"] = gemma_key
+
+            llm_kwargs = {
+                "model": model_name,
+                "api_key": gemma_key or "placeholder_key",
+                "temperature": 0.3,
+                "max_tokens": 4096
+            }
+            if gemma_endpoint:
+                llm_kwargs["base_url"] = gemma_endpoint
+            if headers:
+                llm_kwargs["default_headers"] = headers
+
+            self.llm = ChatOpenAI(**llm_kwargs)
+        else:
+            logger.info("Initializing fallback Groq model")
+            self.llm = ChatGroq(
+                model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
+                api_key=groq_key or "gsk_placeholder_key",
+                temperature=0.3,
+                max_tokens=6000
+            )
         
         self.search_engine = SearchEngine()
         self.rag_engine = RAGEngine()
