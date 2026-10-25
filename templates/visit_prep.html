@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="header-section">
+    <div class="hero-badge">
+        <span class="badge-dot"></span> Innovation F &bull; Health Decision Preparation
+    </div>
+    <h1>CarePrep AI — Doctor Appointment Worksheet</h1>
+    <p class="hero-subtext">
+        Organize your symptoms, history timeline, current medications, and prioritized questions into a clean, printable sheet for your clinician.
+    </p>
+</div>
+
+<div class="single-column-wrapper">
+    <div class="card center-card" id="prep-form-card">
+        <form id="standalone-prep-form" class="ai-form">
+            <div class="form-group">
+                <label for="vp-concern">Primary Reason for Visit / Chief Complaint:</label>
+                <input type="text" id="vp-concern" placeholder="E.g., Chronic lower back pain radiating to right leg for 4 weeks" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="vp-timeline">Symptom Timeline / Progression:</label>
+                    <input type="text" id="vp-timeline" placeholder="E.g., Started 1 month ago after lifting; sharper when sitting">
+                </div>
+                <div class="form-group flex-1">
+                    <label for="vp-specialty">Specialty / Clinic:</label>
+                    <input type="text" id="vp-specialty" placeholder="E.g., Spine Specialist, Orthopedic OPD">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="vp-meds">Current Medications & Supplements:</label>
+                    <input type="text" id="vp-meds" placeholder="E.g., Paracetamol 500mg as needed, Vitamin D3">
+                </div>
+                <div class="form-group flex-1">
+                    <label for="vp-allergies">Known Drug / Food Allergies:</label>
+                    <input type="text" id="vp-allergies" placeholder="E.g., No known drug allergies, or Sulfa drugs">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vp-questions">Specific Questions for Your Doctor (One per line):</label>
+                <textarea id="vp-questions" rows="3" placeholder="E.g., Do I need an MRI scan?&#10;Is physiotherapy safe for this?&#10;What daily activities should I avoid?"></textarea>
+            </div>
+            <button type="submit" class="primary-btn w-100">Generate Appointment Preparation Sheet</button>
+        </form>
+
+        <div id="standalone-prep-loader" class="loader hidden">
+            <div class="pulse-spinner"></div>
+            <p>Compiling structured clinical preparation sheet...</p>
+        </div>
+
+        <div id="standalone-prep-result" class="result-box hidden"></div>
+    </div>
+</div>
+
+{% endblock %}

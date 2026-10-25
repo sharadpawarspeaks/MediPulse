@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="header-section">
+    <div class="hero-badge">
+        <span class="badge-dot"></span> Transparent Healthcare Discovery
+    </div>
+    <h1>DoctorLens & CareFinder</h1>
+    <p class="hero-subtext">
+        Search registered medical practitioners and local healthcare clinics using explicit city and locality verification.
+    </p>
+</div>
+
+<div class="grid-layout-2col">
+    <!-- DoctorLens Card -->
+    <div class="card">
+        <div class="card-header-icon">
+            <span class="tool-icon">👨‍⚕️</span>
+            <div>
+                <h2>DoctorLens AI</h2>
+                <p class="text-sm text-muted">Verify credentials, specialization, and institutional affiliations.</p>
+            </div>
+        </div>
+
+        <form id="doctorlens-form" class="ai-form">
+            <div class="form-group">
+                <label for="doctor-name">Doctor's Full Name:</label>
+                <input type="text" id="doctor-name" placeholder="E.g., Dr. Rajesh Sharma, Dr. Sarah Jenkins" required>
+            </div>
+            <div class="form-group">
+                <label for="doctor-location">City / State (Optional for refinement):</label>
+                <input type="text" id="doctor-location" placeholder="E.g., Mumbai, Delhi, Bengaluru, New York">
+            </div>
+            <button type="submit" class="primary-btn w-100">Search Doctor Credentials</button>
+        </form>
+
+        <div id="doctor-loader" class="loader hidden">
+            <div class="pulse-spinner"></div>
+            <p>Consulting verified medical registry directories...</p>
+        </div>
+        <div id="doctor-result" class="result-box hidden"></div>
+    </div>
+
+    <!-- CareFinder Card -->
+    <div class="card">
+        <div class="card-header-icon">
+            <span class="tool-icon">🏥</span>
+            <div>
+                <h2>CareFinder AI</h2>
+                <p class="text-sm text-muted">Discover appropriate facilities based on symptoms and explicit locality.</p>
+            </div>
+        </div>
+
+        <form id="carefinder-form" class="ai-form">
+            <div class="form-group">
+                <label for="care-symptoms">Symptoms or Desired Care:</label>
+                <textarea id="care-symptoms" rows="2" placeholder="E.g., Severe knee pain, need orthopedic clinic or physiotherapist..." required></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="care-location">City, Locality or PIN/Postal Code:</label>
+                    <input type="text" id="care-location" placeholder="E.g., Pune, Andheri East 400069, London" required>
+                </div>
+                <div class="form-group flex-1">
+                    <label for="care-specialty">Specialty Filter (Optional):</label>
+                    <select id="care-specialty" class="form-control">
+                        <option value="">All Specialties</option>
+                        <option value="General Medicine">General Medicine</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Pulmonology">Pulmonology</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="primary-btn w-100">Find Care Facilities</button>
+        </form>
+
+        <div id="care-loader" class="loader hidden">
+            <div class="pulse-spinner"></div>
+            <p>Locating accredited facilities and specialists...</p>
+        </div>
+        <div id="care-result" class="result-box hidden"></div>
+    </div>
+</div>
+
+{% endblock %}

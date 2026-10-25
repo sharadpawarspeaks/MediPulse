@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="header-section">
+    <div class="hero-badge">
+        <span class="badge-dot"></span> Innovation E &bull; Source-Grounded RAG
+    </div>
+    <h1>ClinicScope Website RAG</h1>
+    <p class="hero-subtext">
+        Analyze public hospital or clinic websites safely with SSRF protection, section-aware semantic chunking, and lexical retrieval.
+    </p>
+</div>
+
+<div class="single-column-wrapper">
+    <div class="card center-card">
+        <div class="security-indicator">
+            <span class="shield-icon">🛡️</span>
+            <div>
+                <strong>SSRF Protection Active:</strong>
+                <span>Requests to localhost, RFC 1918 private subnets (10.x, 192.168.x), and cloud metadata endpoints (169.254.169.254) are strictly blocked.</span>
+            </div>
+        </div>
+
+        <div class="sample-urls-bar">
+            <span>Try sample public site:</span>
+            <button type="button" class="chip-btn" data-url="https://www.aiims.edu">AIIMS New Delhi</button>
+            <button type="button" class="chip-btn" data-url="https://www.nhs.uk">NHS UK Hospitals</button>
+        </div>
+
+        <form id="clinicscope-form" class="ai-form">
+            <div class="form-group">
+                <label for="clinic-url">Public Hospital or Clinic Website URL:</label>
+                <input type="url" id="clinic-url" placeholder="https://www.example-hospital.org" required>
+            </div>
+            <button type="submit" class="primary-btn w-100">Analyze Website with RAG</button>
+        </form>
+
+        <div id="clinic-loader" class="loader hidden">
+            <div class="pulse-spinner"></div>
+            <p>Verifying IP routing, fetching HTML, extracting section chunks, and synthesizing...</p>
+        </div>
+
+        <div id="clinic-result" class="result-box hidden"></div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-badge">
+        <span class="badge-dot"></span> Open-Source Healthcare Intelligence &bull; Google Gemma Powered
+    </div>
+    <h1 class="hero-title">Understand health information.<br><span class="gradient-text">Find evidence. Make informed next steps.</span></h1>
+    <p class="hero-subtext">
+        Evidence-grounded medical guidance, clinical safety red-flag triage, lab report translation, and doctor appointment preparation in one unified open-source platform.
+    </p>
+
+    <!-- Interactive 1-Click Guided Demo Scenarios (For Judges & Instant Evaluation) -->
+    <div class="demo-scenarios-wrapper">
+        <div class="demo-label">
+            <span class="sparkle-icon">⚡</span> <strong>Interactive Hackathon Demo Scenarios</strong> <span class="text-muted">(Click to test instantly with fictional data):</span>
+        </div>
+        <div class="demo-buttons-grid">
+            <button type="button" class="demo-scenario-btn" data-scenario="emergency">
+                <span class="demo-icon">🚨</span>
+                <span class="demo-text">
+                    <strong>Emergency Red-Flag</strong>
+                    <small>Crushing chest pain radiating to left arm</small>
+                </span>
+            </button>
+            <button type="button" class="demo-scenario-btn" data-scenario="truthcheck">
+                <span class="demo-icon">🔍</span>
+                <span class="demo-text">
+                    <strong>Medical Fact Check</strong>
+                    <small>Does cold weather cause colds & viral flu?</small>
+                </span>
+            </button>
+            <button type="button" class="demo-scenario-btn" data-scenario="medisafe">
+                <span class="demo-icon">💊</span>
+                <span class="demo-text">
+                    <strong>Medication Safety</strong>
+                    <small>Paracetamol precautions & alcohol warning</small>
+                </span>
+            </button>
+            <button type="button" class="demo-scenario-btn" data-scenario="lablens">
+                <span class="demo-icon">📄</span>
+                <span class="demo-text">
+                    <strong>Lab Report Translation</strong>
+                    <small>Sample CBC & Fasting Blood Sugar</small>
+                </span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Main Workspace -->
+<section class="dashboard-wrapper">
+    <!-- Sidebar Tabs Navigation -->
+    <div class="tabs-sidebar" role="tablist" aria-label="MediPulse AI Tools">
+        <button class="tab-btn active" data-target="healthsense-tab" role="tab" aria-selected="true">
+            <span class="tab-icon">🩺</span> HealthSense AI
+        </button>
+        <button class="tab-btn" data-target="healthgpt-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">💬</span> HealthGPT Chat
+        </button>
+        <button class="tab-btn" data-target="prevent360-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">🛡️</span> Prevent360 AI
+        </button>
+        <button class="tab-btn" data-target="truthcheck-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">🔍</span> TruthCheck AI
+        </button>
+        <button class="tab-btn" data-target="medisafe-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">💊</span> MediSafe AI
+        </button>
+        <button class="tab-btn" data-target="lablens-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">📄</span> LabLens Report
+        </button>
+        <button class="tab-btn" data-target="careprep-tab" role="tab" aria-selected="false">
+            <span class="tab-icon">📋</span> CarePrep Visit Sheet
+        </button>
+    </div>
+
+    <!-- Tab Content Panes -->
+    <div class="tab-content-area">
+        
+        <!-- 1. HealthSense AI Tab -->
+        <div id="healthsense-tab" class="tab-pane active" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>🩺 HealthSense AI — Symptom Awareness & Triage</h2>
+                    <p class="tab-desc">Analyze symptoms to understand possible physiological causes, self-care measures, and urgent warning signs.</p>
+                </div>
+            </div>
+
+            <!-- Health Literacy & Multilingual Controls -->
+            <div class="controls-toolbar">
+                <div class="toolbar-item">
+                    <label for="hs-reading-level">Reading Level Mode:</label>
+                    <select id="hs-reading-level" class="form-select-sm">
+                        <option value="standard">Standard (Clear & Accessible)</option>
+                        <option value="simple">Simple (Plain English / Grade 6)</option>
+                        <option value="detailed">Detailed (Clinical Differential)</option>
+                        <option value="warnings">Warning Signs Focus (Red Flags)</option>
+                        <option value="questions">Questions for Doctor Focus</option>
+                    </select>
+                </div>
+                <div class="toolbar-item">
+                    <label for="hs-language">Language:</label>
+                    <select id="hs-language" class="form-select-sm">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                    </select>
+                </div>
+            </div>
+
+            <form id="healthsense-form" class="ai-form">
+                <textarea id="hs-symptoms" rows="4" placeholder="Describe symptoms (e.g., Persistent dull headache and mild fatigue for 3 days, no visual changes...)" required></textarea>
+                <div class="form-action-row">
+                    <span class="form-hint">🔒 Clinical safety checks run automatically before AI processing.</span>
+                    <button type="submit" class="primary-btn">Analyze Symptoms</button>
+                </div>
+            </form>
+
+            <div id="hs-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Evaluating clinical safety rules and consulting Gemma...</p>
+            </div>
+            <div id="hs-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- 2. HealthGPT Tab -->
+        <div id="healthgpt-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>💬 HealthGPT — Conversational Health Assistant</h2>
+                    <p class="tab-desc">Empathetic, evidence-informed dialogue to explore health concepts and clarify medical questions.</p>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages-area">
+                    <div class="message msg-ai">
+                        <p><strong>Hello! I'm HealthGPT.</strong> How can I assist you with understanding health concepts, symptoms, or preparing for a clinical appointment today?</p>
+                        <p class="text-sm text-muted"><em>Reminder: I provide educational health information and cannot diagnose illnesses or prescribe medications.</em></p>
+                    </div>
+                </div>
+
+                <div id="chat-loader" class="loader hidden">
+                    <div class="dot-typing"></div>
+                    <span>HealthGPT is synthesizing evidence...</span>
+                </div>
+
+                <form id="healthgpt-form" class="chat-input-bar">
+                    <input type="text" id="chat-input" placeholder="Ask a health question (e.g., How does sleep apnea affect cardiovascular health?)..." autocomplete="off" required>
+                    <button type="submit" class="primary-btn">Send</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. Prevent360 AI Tab -->
+        <div id="prevent360-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>🛡️ Prevent360 AI — Evidence-Based Prevention</h2>
+                    <p class="tab-desc">Generate personalized lifestyle habits, exercise routines, nutrition tips, and screening recommendations.</p>
+                </div>
+            </div>
+
+            <form id="prevent-form" class="ai-form">
+                <div class="form-group">
+                    <label for="prevent-focus">Select or Enter Health Focus Area:</label>
+                    <input type="text" id="prevent-focus" list="prevent-suggestions" placeholder="E.g., Heart & Arterial Health, Type 2 Diabetes Prevention, Sleep Architecture..." required>
+                    <datalist id="prevent-suggestions">
+                        <option value="Cardiovascular & Heart Health">
+                        <option value="Type 2 Diabetes Prevention & Glucose Control">
+                        <option value="Immune System Optimization & Gut Health">
+                        <option value="Sleep Quality & Circadian Hygiene">
+                        <option value="Mental Resilience & Cortisol Management">
+                    </datalist>
+                </div>
+                <button type="submit" class="primary-btn">Generate Prevention Blueprint</button>
+            </form>
+
+            <div id="prevent-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Synthesizing WHO & AHA preventive health guidelines...</p>
+            </div>
+            <div id="prevent-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- 4. TruthCheck AI Tab -->
+        <div id="truthcheck-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>🔍 TruthCheck AI — Medical Myth Buster & Fact Checker</h2>
+                    <p class="tab-desc">Ground claims against authoritative public health sources (WHO, CDC, NIH, PubMed Central).</p>
+                </div>
+            </div>
+
+            <form id="truthcheck-form" class="ai-form">
+                <div class="form-group">
+                    <label for="truth-query">Enter Health Claim or Question to Verify:</label>
+                    <input type="text" id="truth-query" placeholder="E.g., Does taking vitamin C prevent getting the common cold?" required>
+                </div>
+                <button type="submit" class="primary-btn">Verify Medical Evidence</button>
+            </form>
+
+            <div id="truth-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Retrieving peer-reviewed citations and clinical consensus...</p>
+            </div>
+            <div id="truth-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- 5. MediSafe AI Tab -->
+        <div id="medisafe-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>💊 MediSafe AI — Medication Safety Guide</h2>
+                    <p class="tab-desc">Understand indications, critical precautions, potential interactions, and side effects. Never replaces your pharmacist.</p>
+                </div>
+            </div>
+
+            <form id="medisafe-form" class="ai-form">
+                <div class="form-group">
+                    <label for="medicine-name">Enter Generic or Brand Medication Name:</label>
+                    <input type="text" id="medicine-name" placeholder="E.g., Paracetamol, Metformin, Amoxicillin, Ibuprofen..." required>
+                </div>
+                <button type="submit" class="primary-btn">Check Medication Safety</button>
+            </form>
+
+            <div id="medisafe-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Querying pharmacological reference monographs...</p>
+            </div>
+            <div id="medisafe-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- 6. LabLens AI (Medical Report Extraction) Tab -->
+        <div id="lablens-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>📄 LabLens AI — Medical Lab Report Explainer</h2>
+                    <p class="tab-desc">Translate complex lab report metrics, reference ranges, and clinical terminology into plain English.</p>
+                </div>
+            </div>
+
+            <form id="lablens-form" class="ai-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="report-file-input">Upload PDF Report (Max 5MB, Digital PDF):</label>
+                    <input type="file" id="report-file-input" accept=".pdf,.txt" class="file-input">
+                </div>
+                <div class="divider-text">OR PASTE REPORT TEXT DIRECTLY</div>
+                <div class="form-group">
+                    <textarea id="report-text-input" rows="4" placeholder="Paste lab test values here (e.g., Hemoglobin: 11.2 g/dL, Fasting Blood Glucose: 138 mg/dL, HbA1c: 6.8%, Platelets: 180000 /mcL)..."></textarea>
+                </div>
+                <div class="form-action-row">
+                    <button type="button" id="load-sample-report-btn" class="secondary-btn btn-sm">Load Sample Lab Data</button>
+                    <button type="submit" class="primary-btn">Explain Lab Report</button>
+                </div>
+            </form>
+
+            <div id="report-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Extracting lab markers and generating plain-language explanations...</p>
+            </div>
+            <div id="report-result" class="result-box hidden"></div>
+        </div>
+
+        <!-- 7. CarePrep AI Tab -->
+        <div id="careprep-tab" class="tab-pane hidden" role="tabpanel">
+            <div class="tab-header">
+                <div>
+                    <h2>📋 CarePrep AI — Doctor Visit Preparation Worksheet</h2>
+                    <p class="tab-desc">Organize your symptoms, timeline, medications, and high-yield questions for your doctor into a printable summary.</p>
+                </div>
+            </div>
+
+            <form id="careprep-form" class="ai-form">
+                <div class="form-group">
+                    <label for="prep-concern">Primary Reason for Doctor Visit (Chief Concern):</label>
+                    <input type="text" id="prep-concern" placeholder="E.g., Persistent joint pain in right knee after walking" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="prep-timeline">Symptom Timeline / History:</label>
+                        <input type="text" id="prep-timeline" placeholder="E.g., Started 3 weeks ago, worse in morning">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="prep-specialty">Intended Doctor Specialty:</label>
+                        <input type="text" id="prep-specialty" placeholder="E.g., Orthopedic, General Physician">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="prep-meds">Current Medications / Supplements:</label>
+                        <input type="text" id="prep-meds" placeholder="E.g., Multivitamin, Calcium 500mg">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="prep-allergies">Known Drug / Food Allergies:</label>
+                        <input type="text" id="prep-allergies" placeholder="E.g., Penicillin allergy, Shellfish">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="prep-questions">Specific Questions You Want Answered (One per line):</label>
+                    <textarea id="prep-questions" rows="2" placeholder="E.g., Is an MRI necessary?&#10;Can physical therapy help?"></textarea>
+                </div>
+                <button type="submit" class="primary-btn">Generate Printable Visit Sheet</button>
+            </form>
+
+            <div id="careprep-loader" class="loader hidden">
+                <div class="pulse-spinner"></div>
+                <p>Structuring clinical summary and questions...</p>
+            </div>
+            <div id="careprep-result" class="result-box hidden"></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Additional Discovery Features Spotlight -->
+<section class="spotlight-section">
+    <div class="spotlight-card">
+        <div class="spotlight-content">
+            <span class="spotlight-tag">Care Discovery</span>
+            <h3>DoctorLens & CareFinder</h3>
+            <p>Locate verified doctors and clinical facilities grounded by explicit city, locality, and postal codes.</p>
+            <a href="/doctor" class="secondary-btn">Explore Care Discovery &rarr;</a>
+        </div>
+    </div>
+    <div class="spotlight-card">
+        <div class="spotlight-content">
+            <span class="spotlight-tag">Security-Hardened RAG</span>
+            <h3>ClinicScope Website RAG</h3>
+            <p>Analyze hospital and clinic websites safely with SSRF protection and chunk-level evidence retrieval.</p>
+            <a href="/clinic" class="secondary-btn">Explore ClinicScope &rarr;</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
