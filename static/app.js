@@ -33,13 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (installBtn) {
+        // Keep install button accessible on Android & PWA-compatible environments
+        installBtn.classList.remove('hidden');
+
         installBtn.addEventListener('click', async () => {
-            if (!deferredInstallPrompt) return;
-            deferredInstallPrompt.prompt();
-            const { outcome } = await deferredInstallPrompt.userChoice;
-            console.log('[MediPulse PWA] User install choice:', outcome);
-            deferredInstallPrompt = null;
-            installBtn.classList.add('hidden');
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
+                console.log('[MediPulse PWA] User install choice:', outcome);
+                if (outcome === 'accepted') {
+                    installBtn.classList.add('hidden');
+                }
+                deferredInstallPrompt = null;
+            } else {
+                // If browser has not fired beforeinstallprompt or is already in browser
+                alert('📱 Install MediPulse as an Android App:\n\n1. In Chrome, tap the three dots menu (⋮) in the top-right corner.\n2. Tap "Install app" or "Add to Home screen".\n3. MediPulse will install directly onto your device with offline support!');
+            }
         });
     }
 
@@ -129,12 +138,22 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================================== */
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
+    const androidNavItems = document.querySelectorAll('.android-nav-item');
 
     const switchTab = (targetId) => {
+        // Sync desktop sidebar tabs
         tabBtns.forEach(b => {
             const isMatch = b.dataset.target === targetId;
             b.classList.toggle('active', isMatch);
             b.setAttribute('aria-selected', isMatch);
+        });
+
+        // Sync Android bottom navigation bar
+        androidNavItems.forEach(item => {
+            if (item.dataset.tab) {
+                const isMatch = item.dataset.tab === targetId;
+                item.classList.toggle('active', isMatch);
+            }
         });
 
         tabPanes.forEach(pane => {
@@ -154,6 +173,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.target));
+    });
+
+    // Android Bottom Navigation 1-tap tab switching
+    androidNavItems.forEach(item => {
+        const tabTarget = item.dataset.tab;
+        if (tabTarget && (window.location.pathname === '/' || window.location.pathname === '')) {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(tabTarget);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
     });
 
     // Check hash on load

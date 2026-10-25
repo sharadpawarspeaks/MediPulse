@@ -1437,3 +1437,88 @@ select:focus {
   .hero-title { font-size: 1.85rem; }
   .emergency-inner { flex-direction: column; text-align: center; }
 }
+
+/* ==========================================================================
+   Android Material 3 Bottom Navigation Bar
+   ========================================================================== */
+
+.android-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: 0 -4px 16px rgba(11, 23, 39, 0.08);
+  z-index: 999;
+  padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom)) 0.5rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.android-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-md);
+  flex: 1;
+  max-width: 80px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.android-nav-item:active {
+  transform: scale(0.92);
+}
+
+.nav-icon-container {
+  width: 44px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+}
+
+.android-nav-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.android-nav-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.android-nav-item.active .nav-icon-container {
+  background-color: #e0f2fe;
+}
+
+.android-nav-item.active .android-nav-label {
+  color: var(--brand-blue);
+  font-weight: 700;
+}
+
+/* Show bottom nav on mobile/tablet viewports */
+@media (max-width: 860px) {
+  .android-bottom-nav {
+    display: flex;
+  }
+  body {
+    padding-bottom: 72px; /* Prevent content clipping by bottom nav */
+  }
+}
+

@@ -72,7 +72,7 @@
                 </button>
 
                 <!-- Android PWA Install Trigger -->
-                <button type="button" id="pwa-install-btn" class="install-pwa-btn hidden" title="Install Android PWA">
+                <button type="button" id="pwa-install-btn" class="install-pwa-btn" title="Install Android PWA">
                     <span>📲 Install App</span>
                 </button>
 
@@ -142,6 +142,40 @@
     <main class="container" id="main-content">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- Android PWA Bottom Navigation Bar (Material 3 Style) -->
+    <nav class="android-bottom-nav" aria-label="Android Bottom Navigation">
+        <a href="/#healthsense-tab" class="android-nav-item active" data-tab="healthsense-tab" aria-label="HealthSense AI">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">🩺</span>
+            </div>
+            <span class="android-nav-label">HealthSense</span>
+        </a>
+        <a href="/#healthgpt-tab" class="android-nav-item" data-tab="healthgpt-tab" aria-label="HealthGPT">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">💬</span>
+            </div>
+            <span class="android-nav-label">HealthGPT</span>
+        </a>
+        <a href="/#truthcheck-tab" class="android-nav-item" data-tab="truthcheck-tab" aria-label="TruthCheck AI">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">🔍</span>
+            </div>
+            <span class="android-nav-label">TruthCheck</span>
+        </a>
+        <a href="/report" class="android-nav-item {% if request.path == '/report' %}active{% endif %}" data-tab="lablens-tab" aria-label="LabLens Reports">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">📄</span>
+            </div>
+            <span class="android-nav-label">LabLens</span>
+        </a>
+        <a href="/visit-prep" class="android-nav-item {% if request.path == '/visit-prep' %}active{% endif %}" data-tab="careprep-tab" aria-label="CarePrep Worksheet">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">📋</span>
+            </div>
+            <span class="android-nav-label">CarePrep</span>
+        </a>
+    </nav>
 
     <!-- Global Footer -->
     <footer class="footer">
