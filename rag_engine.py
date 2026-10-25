@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import requests
 from bs4 import BeautifulSoup
 from utils import logger, retry_on_exception, clean_html_text
@@ -53,3 +54,9 @@ class RAGEngine:
         # Given constraints, we truncate for statelessness.
         logger.info("Content truncated to fit context window.")
         return text[:max_chars] + "\n...[Content Truncated]..."
+=======
+"""Compatibility wrapper for RAGEngine."""
+from app.services.rag_engine import RAGEngine
+
+__all__ = ["RAGEngine"]
+>>>>>>> origin/devFinal

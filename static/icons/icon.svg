@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="medipulse-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0284c7" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="112" fill="#0b1727"/>
+  
+  <!-- Subtle inner gradient ring -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="url(#medipulse-grad)" stroke-width="4" stroke-opacity="0.4"/>
+
+  <!-- Medical Cross Base (Subtle) -->
+  <g opacity="0.15">
+    <rect x="236" y="116" width="40" height="280" rx="20" fill="#38bdf8"/>
+    <rect x="116" y="236" width="280" height="40" rx="20" fill="#38bdf8"/>
+  </g>
+
+  <!-- Pulse / ECG Waveform with Gradient and Glow -->
+  <path d="M 64 256 L 140 256 L 175 256 L 205 160 L 245 350 L 285 100 L 325 380 L 355 256 L 390 256 L 448 256" 
+        fill="none" 
+        stroke="url(#medipulse-grad)" 
+        stroke-width="26" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+
+  <!-- Glowing Heartbeat Node -->
+  <circle cx="285" cy="100" r="14" fill="#38bdf8" filter="url(#glow)"/>
+  <circle cx="285" cy="100" r="7" fill="#ffffff"/>
+
+  <!-- Small Pulse Dot at end -->
+  <circle cx="448" cy="256" r="10" fill="#10b981"/>
+</svg>

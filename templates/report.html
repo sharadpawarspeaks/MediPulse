@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="header-section">
+    <div class="hero-badge">
+        <span class="badge-dot"></span> Innovation D &bull; Medical Report Understanding
+    </div>
+    <h1>LabLens AI — Medical Report Translation</h1>
+    <p class="hero-subtext">
+        Demystify complex clinical lab values, blood panels, and reference ranges into plain English without making diagnoses.
+    </p>
+</div>
+
+<div class="single-column-wrapper">
+    <div class="card center-card">
+        <div class="privacy-notice-box">
+            <span class="lock-icon">🔒</span>
+            <div>
+                <strong>Zero Remote Training:</strong>
+                <span>Uploaded report text is processed in-memory and discarded immediately after generating explanations.</span>
+            </div>
+        </div>
+
+        <form id="standalone-report-form" class="ai-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="report-file">Upload Lab Report (PDF / TXT, Max 5MB):</label>
+                <input type="file" id="report-file" accept=".pdf,.txt" class="file-input">
+            </div>
+
+            <div class="divider-text">OR PASTE TEST PARAMETERS</div>
+
+            <div class="form-group">
+                <label for="report-text">Paste Text from Diagnostic Laboratory:</label>
+                <textarea id="report-text" rows="5" placeholder="E.g.,&#10;Complete Blood Count (CBC)&#10;Hemoglobin: 11.5 g/dL&#10;Fasting Blood Sugar: 142 mg/dL&#10;HbA1c: 6.9%&#10;Total Cholesterol: 215 mg/dL&#10;Serum Creatinine: 1.1 mg/dL"></textarea>
+            </div>
+
+            <div class="form-action-row">
+                <button type="button" id="standalone-sample-btn" class="secondary-btn btn-sm">Load Sample Lab Data</button>
+                <button type="submit" class="primary-btn">Analyze & Explain Report</button>
+            </div>
+        </form>
+
+        <div id="standalone-report-loader" class="loader hidden">
+            <div class="pulse-spinner"></div>
+            <p>Extracting lab markers, checking reference boundaries, and synthesizing plain-language explanations...</p>
+        </div>
+
+        <div id="standalone-report-result" class="result-box hidden"></div>
+    </div>
+</div>
+
+{% endblock %}

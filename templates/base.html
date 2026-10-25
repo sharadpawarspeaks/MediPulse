@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediPulse AI - Your Intelligent Health Companion</title>
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.jpg') }}">
@@ -51,3 +52,236 @@
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>MediPulse - Understand health information. Find evidence. Make informed next steps.</title>
+    
+    <!-- PWA Meta Tags for Android & Mobile -->
+    <meta name="description" content="Evidence-first, open-source healthcare intelligence platform powered by Google Gemma. Understand symptoms, verify facts, and prepare for doctor visits.">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="background-color" content="#0b1727">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MediPulse">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icons/icon.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+
+    <!-- Typography: Google Fonts (Inter & Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Skip to content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Global Emergency Alert Banner -->
+    <aside id="global-emergency-banner" class="emergency-banner hidden" role="alert" aria-live="assertive">
+        <div class="emergency-inner">
+            <span class="emergency-icon">🚨</span>
+            <div class="emergency-details">
+                <strong id="emergency-title">EMERGENCY ALERT:</strong>
+                <span id="emergency-text"></span>
+            </div>
+            <a href="tel:112" class="emergency-call-btn">📞 Call 112 / 911</a>
+            <button type="button" class="emergency-close-btn" id="emergency-close-btn" aria-label="Dismiss banner">✕</button>
+        </div>
+    </aside>
+
+    <!-- Top Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand" aria-label="MediPulse Home">
+                <div class="brand-icon-wrapper">
+                    <img src="{{ url_for('static', filename='icons/icon.svg') }}" alt="MediPulse Pulse Logo" class="brand-logo-img">
+                    <span class="heartbeat-dot"></span>
+                </div>
+                <div class="brand-text-group">
+                    <span class="brand-title">Medi<span class="pulse-highlight">Pulse</span></span>
+                    <span class="brand-tag">AI & Evidence</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">Dashboard</a>
+                <a href="/doctor" class="nav-link {% if request.path == '/doctor' %}active{% endif %}">Doctor & Care</a>
+                <a href="/clinic" class="nav-link {% if request.path == '/clinic' %}active{% endif %}">Clinic RAG</a>
+                <a href="/report" class="nav-link {% if request.path == '/report' %}active{% endif %}">LabLens Report</a>
+                <a href="/visit-prep" class="nav-link {% if request.path == '/visit-prep' %}active{% endif %}">Visit Prep</a>
+            </nav>
+
+            <div class="nav-actions">
+                <!-- Local Privacy Profile Button -->
+                <button type="button" id="profile-modal-btn" class="secondary-btn btn-sm" title="Manage private local health context">
+                    <span class="btn-icon">🔒</span> <span class="hide-mobile">Health Context</span>
+                </button>
+
+                <!-- Android PWA Install Trigger -->
+                <button type="button" id="pwa-install-btn" class="install-pwa-btn" title="Install Android PWA">
+                    <span>📲 Install App</span>
+                </button>
+
+                <!-- Mobile Hamburger Toggle -->
+                <button type="button" class="hamburger" id="hamburger" aria-label="Open Menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="/" class="mobile-nav-link">🏠 Dashboard</a>
+            <a href="/doctor" class="mobile-nav-link">🩺 Doctor & Care Discovery</a>
+            <a href="/clinic" class="mobile-nav-link">🏥 ClinicScope Website RAG</a>
+            <a href="/report" class="mobile-nav-link">📄 LabLens Medical Report</a>
+            <a href="/visit-prep" class="mobile-nav-link">📋 Doctor Visit Prep Sheet</a>
+            <div class="mobile-profile-wrapper">
+                <button type="button" id="mobile-profile-btn" class="secondary-btn w-100">🔒 My Health Context (Local)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Health Context Profile Modal (Privacy by Design) -->
+    <div id="profile-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">🔒 Private Health Context (Stored Locally)</h3>
+                <button type="button" class="modal-close" id="profile-modal-close" aria-label="Close modal">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">
+                    MediPulse adheres to <strong>Privacy by Design</strong>. Any information you enter here is stored exclusively in your browser's local memory (<code>localStorage</code>) and is never persisted to any remote database.
+                </p>
+                <form id="health-context-form">
+                    <div class="form-group">
+                        <label for="ctx-age">Age Bracket (Optional):</label>
+                        <select id="ctx-age" class="form-control">
+                            <option value="">Not Specified</option>
+                            <option value="18-30">18–30 years</option>
+                            <option value="31-50">31–50 years</option>
+                            <option value="51-65">51–65 years</option>
+                            <option value="65+">65+ years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ctx-conditions">Known Health Conditions (e.g. Asthma, Hypertension):</label>
+                        <input type="text" id="ctx-conditions" class="form-control" placeholder="E.g., Mild Asthma, Type 2 Diabetes">
+                    </div>
+                    <div class="form-group">
+                        <label for="ctx-language">Preferred Explanation Language:</label>
+                        <select id="ctx-language" class="form-control">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी (Hindi)</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="clear-profile-btn" class="danger-outline-btn">Clear Stored Context</button>
+                        <button type="submit" class="primary-btn">Save to Browser</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="container" id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Android PWA Bottom Navigation Bar (Material 3 Style) -->
+    <nav class="android-bottom-nav" aria-label="Android Bottom Navigation">
+        <a href="/#healthsense-tab" class="android-nav-item active" data-tab="healthsense-tab" aria-label="HealthSense AI">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">🩺</span>
+            </div>
+            <span class="android-nav-label">HealthSense</span>
+        </a>
+        <a href="/#healthgpt-tab" class="android-nav-item" data-tab="healthgpt-tab" aria-label="HealthGPT">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">💬</span>
+            </div>
+            <span class="android-nav-label">HealthGPT</span>
+        </a>
+        <a href="/#truthcheck-tab" class="android-nav-item" data-tab="truthcheck-tab" aria-label="TruthCheck AI">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">🔍</span>
+            </div>
+            <span class="android-nav-label">TruthCheck</span>
+        </a>
+        <a href="/report" class="android-nav-item {% if request.path == '/report' %}active{% endif %}" data-tab="lablens-tab" aria-label="LabLens Reports">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">📄</span>
+            </div>
+            <span class="android-nav-label">LabLens</span>
+        </a>
+        <a href="/visit-prep" class="android-nav-item {% if request.path == '/visit-prep' %}active{% endif %}" data-tab="careprep-tab" aria-label="CarePrep Worksheet">
+            <div class="nav-icon-container">
+                <span class="android-nav-icon">📋</span>
+            </div>
+            <span class="android-nav-label">CarePrep</span>
+        </a>
+    </nav>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="{{ url_for('static', filename='icons/icon.svg') }}" alt="MediPulse" width="28" height="28">
+                    <span>Medi<strong class="pulse-highlight">Pulse</strong></span>
+                </div>
+                <p class="footer-tagline">Understand health information. Find evidence. Make informed next steps.</p>
+                <div class="model-badge">
+                    <span>Powered by <strong>Google Gemma</strong></span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="/">Dashboard & Tools</a></li>
+                    <li><a href="/doctor">Doctor & Care Discovery</a></li>
+                    <li><a href="/clinic">ClinicScope Website RAG</a></li>
+                    <li><a href="/report">LabLens Report Analyzer</a></li>
+                    <li><a href="/visit-prep">Appointment Prep Worksheet</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Open-Source & Safety</h4>
+                <ul>
+                    <li><a href="https://github.com/sharadpawarspeaks/MediPulse" target="_blank" rel="noopener">GitHub Repository</a></li>
+                    <li><a href="https://github.com/sharadpawarspeaks/MediPulse/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a></li>
+                    <li><a href="https://github.com/sharadpawarspeaks/MediPulse/blob/main/SECURITY.md" target="_blank" rel="noopener">Responsible AI & Security</a></li>
+                    <li><a href="https://github.com/shravanshidruk16/MediNova-AI-Hack2Skill-x-Prompt-Wars-Challenge" target="_blank" rel="noopener">MediNova (Upstream Project)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-inner">
+                <p class="disclaimer-text">
+                    <strong>Medical Disclaimer:</strong> MediPulse is an educational and health literacy tool. It does not provide medical diagnoses, clinical treatment plans, or emergency services. In case of a medical emergency, call 112 (India/EU), 911 (USA), or 999 (UK) immediately.
+                </p>
+                <p class="copyright-text">
+                    &copy; 2026 MediPulse. Built on open-source foundations (MediNova by Shravan Shidruk). MIT Licensed.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Marked.js for safe Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify for XSS Sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <!-- MediPulse Application Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+>>>>>>> origin/devFinal

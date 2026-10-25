@@ -1,6 +1,11 @@
 MIT License
 
+<<<<<<< HEAD
 Copyright (c) 2026 Shravan Shidruk
+=======
+Copyright (c) 2026 Sharad Pawar (MediPulse)
+Copyright (c) 2026 Shravan Shidruk (MediNova - Original Upstream Project)
+>>>>>>> origin/devFinal
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +24,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+<<<<<<< HEAD
+=======
+
+---
+### Upstream Project Attribution:
+MediPulse is developed as a major architectural evolution of MediNova:
+- Original Project: https://github.com/shravanshidruk16/MediNova-AI-Hack2Skill-x-Prompt-Wars-Challenge
+- Original Author: Shravan Shidruk
+- Enhancements in MediPulse: Google Gemma integration via google-genai SDK, deterministic clinical safety red-flag engine, SSRF-protected clinic website RAG, LabLens lab report understanding, CarePrep appointment worksheet generator, Android PWA offline support, and WCAG-accessible UI redesign.
+>>>>>>> origin/devFinal

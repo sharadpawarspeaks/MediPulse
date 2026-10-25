@@ -1,0 +1,61 @@
+{
+  "name": "MediPulse - Health Intelligence & Evidence",
+  "short_name": "MediPulse",
+  "description": "Understand health information. Find evidence. Make informed next steps.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1727",
+  "theme_color": "#0284c7",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "health",
+    "medical",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Check Symptoms",
+      "short_name": "Symptoms",
+      "description": "Triage and evaluate symptoms with HealthSense AI",
+      "url": "/#healthsense-tab",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Find Doctors & Care",
+      "short_name": "Find Care",
+      "description": "Discover verified doctors and clinics by location",
+      "url": "/doctor",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Analyze Lab Report",
+      "short_name": "LabLens",
+      "description": "Translate medical reports into plain English",
+      "url": "/#report-tab",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

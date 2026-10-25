@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from langchain_core.prompts import PromptTemplate
 
 
@@ -158,3 +159,7 @@ Provide a detailed summary including (if available):
 {BASE_JSON_INSTRUCTION}
 """
 )
+=======
+"""Root prompt templates wrapper."""
+from app.prompt_templates import *
+>>>>>>> origin/devFinal

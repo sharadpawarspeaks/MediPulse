@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="offline-wrapper">
+    <div class="card center-card text-center">
+        <div class="offline-icon">📡</div>
+        <h1>You are Currently Offline</h1>
+        <p class="hero-subtext">
+            MediPulse PWA is running in offline mode. While active web searches and live AI endpoints require connectivity, emergency guidance and stored offline tools remain active.
+        </p>
+
+        <div class="offline-emergency-box">
+            <h3>🚨 Emergency Medical Hotlines</h3>
+            <p>If you or someone near you has acute chest pain, breathing difficulty, or stroke symptoms:</p>
+            <div class="emergency-numbers-grid">
+                <a href="tel:112" class="num-chip">🇮🇳 🇪🇺 112 (Universal)</a>
+                <a href="tel:911" class="num-chip">🇺🇸 911 (USA)</a>
+                <a href="tel:999" class="num-chip">🇬🇧 999 (UK)</a>
+            </div>
+        </div>
+
+        <div class="offline-actions">
+            <button type="button" class="primary-btn" onclick="window.location.reload()">Retry Connection</button>
+            <a href="/" class="secondary-btn">Return to Cached Dashboard</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
