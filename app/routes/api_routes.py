@@ -101,7 +101,7 @@ def api_prevent():
 def api_truthcheck():
     """Evidence-grounded medical myth-busting and fact-checking."""
     data = request.get_json(silent=True) or {}
-    query = (data.get("query") or "").strip()
+    query = (data.get("query") or data.get("claim") or "").strip()
     if not query:
         return jsonify({"error": "Health claim or question is required."}), 400
 
