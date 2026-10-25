@@ -61,13 +61,12 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
+    width: 100%;
 }
 
 .nav-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 1rem 2rem;
-
+    width: 100%;
+    padding: 0.85rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -82,6 +81,7 @@ body {
     display: flex;
     align-items: center;
     gap: .75rem;
+    white-space: nowrap;
 }
 
 .brand-logo-img {
@@ -101,12 +101,18 @@ body {
     color: var(--secondary-green);
 }
 
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
 .nav-links a {
     text-decoration: none;
     color: var(--text-dark);
     margin-left: 2rem;
     font-weight: 600;
     transition: .2s;
+    white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -526,6 +532,10 @@ textarea {
 ============================ */
 
 @media (max-width: 768px) {
+
+    .nav-container {
+        padding: 0.75rem 1.25rem;
+    }
 
     .grid-layout {
         grid-template-columns: 1fr;
