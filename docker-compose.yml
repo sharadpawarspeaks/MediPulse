@@ -4,9 +4,13 @@ services:
     container_name: medipulse-app
     ports:
       - "5000:5000"
+    env_file:
+      - .env
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GEMMA_MODEL=${GEMMA_MODEL:-gemma-4-26b-a4b-it}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
       - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-medipulse-compose-secret-key}
       - MOCK_AI=${MOCK_AI:-false}
     restart: unless-stopped
+
