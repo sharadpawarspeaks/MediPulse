@@ -97,17 +97,51 @@ class EvidenceEngine:
     ]
 
     def __init__(self):
-        self.tavily_key = Config.TAVILY_API_KEY
+        from dotenv import load_dotenv
+        load_dotenv(dotenv_path=".env", override=True)
+        self.tavily_key = (os.getenv("TAVILY_API_KEY") or Config.TAVILY_API_KEY or "").strip("\"' \t\r\n")
         self.tavily_url = "https://api.tavily.com/search"
 
     def retrieve_evidence(self, query: str) -> Dict[str, Any]:
         """
         Retrieves evidence from authoritative health sources.
-        Uses Tavily search if configured; otherwise matches against curated clinical knowledge.
+        Prioritizes live real-time Tavily search whenever configured;
+        gracefully falls back to curated clinical knowledge if offline.
         """
-        query_lower = query.lower()
+        # 1. Prioritize Live Tavily Real-Time Web Search
+        if self.tavily_key:
+            try:
+                payload = {
+                    "api_key": self.tavily_key,
+                    "query": f"medical evidence fact check: {query}",
+                    "search_depth": "advanced",
+                    "max_results": 4
+                }
+                res = requests.post(self.tavily_url, json=payload, timeout=Config.REQUEST_TIMEOUT)
+                if res.status_code == 200:
+                    data = res.json()
+                    results = data.get("results", [])
+                    if results:
+                        formatted_sources = [
+                            f"{r.get('title', 'Medical Citation')} - {r.get('url', '')}"
+                            for r in results if r.get('url')
+                        ]
+                        summary_text = "\n\n".join([f"**{r.get('title', 'Source')}**: {r.get('content', '')}" for r in results[:3]])
+                        return {
+                            "matched": True,
+                            "claim": query,
+                            "verdict": "Real-Time Evidence Retrieved",
+                            "summary": summary_text,
+                            "sources": formatted_sources,
+                            "raw_sources": results,
+                            "evidence_strength": "Level A - Live Real-Time Web Search",
+                            "retrieval_method": "Live Real-Time Medical Search (Tavily)"
+                        }
+            except Exception as e:
+                logger.error(f"Live Tavily evidence retrieval error: {e}")
 
-        # Check curated knowledge base first for deterministic match
+        # 2. Fallback to Curated Knowledge Base if offline or Tavily unavailable
+        query_lower = query.lower()
         for item in self.CURATED_HEALTH_FACTS:
             if any(k in query_lower for k in item["keywords"]):
                 return {
@@ -118,48 +152,15 @@ class EvidenceEngine:
                     "sources": [f"{s['title']} ({s['publisher']}) - {s['url']}" for s in item["sources"]],
                     "raw_sources": item["sources"],
                     "evidence_strength": item["strength"],
-                    "retrieval_method": "Curated Authoritative Registry (WHO / CDC / NIH)"
+                    "retrieval_method": "Curated Authoritative Registry (Offline Fallback)"
                 }
 
-        # If Tavily API Key is configured, attempt live medical search
-        if self.tavily_key:
-            try:
-                payload = {
-                    "api_key": self.tavily_key,
-                    "query": f"evidence medical fact check peer-reviewed: {query}",
-                    "search_depth": "advanced",
-                    "max_results": 4,
-                    "include_domains": Config.TRUSTED_HEALTH_DOMAINS
-                }
-                res = requests.post(self.tavily_url, json=payload, timeout=Config.REQUEST_TIMEOUT)
-                if res.status_code == 200:
-                    data = res.json()
-                    results = data.get("results", [])
-                    if results:
-                        formatted_sources = [
-                            f"{r.get('title', 'Medical Citation')} - {r.get('url', '')}"
-                            for r in results
-                        ]
-                        summary_text = "\n".join([r.get("content", "") for r in results[:3]])
-                        return {
-                            "matched": True,
-                            "claim": query,
-                            "verdict": "Evidence Retrieved",
-                            "summary": summary_text,
-                            "sources": formatted_sources,
-                            "raw_sources": results,
-                            "evidence_strength": "Level B - Live Peer-Reviewed Search",
-                            "retrieval_method": "Live Medical Authority Search (Tavily)"
-                        }
-            except Exception as e:
-                logger.error(f"Live evidence retrieval error: {e}")
-
-        # Fallback when no direct match or live search is available
+        # 3. Default General Synthesis
         return {
             "matched": False,
             "claim": query,
             "verdict": "Inconclusive / General Analysis",
-            "summary": "Specific peer-reviewed consensus for this query was not indexed in local authority registries. Consulting licensed medical literature.",
+            "summary": "Live search did not yield conclusive peer-reviewed consensus for this query. Consulting general health guidelines.",
             "sources": [
                 "World Health Organization Health Topics (https://who.int)",
                 "NIH MedlinePlus Health Information (https://medlineplus.gov)"

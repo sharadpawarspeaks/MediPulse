@@ -247,18 +247,42 @@ class GemmaService:
     """
 
     def __init__(self):
-        self.api_key = Config.GEMINI_API_KEY
-        self.model_name = Config.GEMMA_MODEL
-        self.mock_mode = Config.MOCK_AI
+        # Refresh configuration in case .env was recently modified
+        from dotenv import load_dotenv
+        load_dotenv(dotenv_path=".env", override=True)
+
+        self.api_key = (
+            os.getenv("GEMINI_API_KEY")
+            or os.getenv("GEMMA_API_KEY")
+            or os.getenv("GOOGLE_API_KEY")
+            or os.getenv("APIM_API_KEY")
+            or ""
+        ).strip("\"' \t\r\n")
+
+        self.endpoint = (
+            os.getenv("GEMMA_ENDPOINT")
+            or os.getenv("APIM_ENDPOINT")
+            or ""
+        ).strip("\"' \t\r\n")
+
+        self.model_name = (
+            os.getenv("GEMMA_MODEL")
+            or os.getenv("GEMMA_MODEL_NAME")
+            or "gemma-4-26b-a4b-it"
+        ).strip("\"' \t\r\n")
+
+        self.mock_mode = os.getenv("MOCK_AI", "").lower() in ("true", "1", "yes")
         self.client = None
 
-        if not self.mock_mode and self.api_key and GENAI_AVAILABLE:
+        if not self.mock_mode and self.api_key and GENAI_AVAILABLE and not self.endpoint:
             try:
                 self.client = genai.Client(api_key=self.api_key)
                 logger.info(f"Initialized Google Gen AI Client with Gemma model: {self.model_name}")
             except Exception as e:
                 logger.error(f"Failed to initialize Google Gen AI Client: {e}")
                 self.mock_mode = True
+        elif not self.mock_mode and self.endpoint:
+            logger.info(f"Initialized custom Gemma APIM Endpoint: {self.endpoint} (Model: {self.model_name})")
         else:
             self.mock_mode = True
             logger.info(f"GemmaService operating in Mock/Offline mode (Model: {self.model_name})")
@@ -295,10 +319,7 @@ class GemmaService:
         reraise=False
     )
     def _call_live_gemma(self, prompt: str) -> Optional[str]:
-        """Calls the live Gemma model using google-genai SDK."""
-        if not self.client:
-            return None
-
+        """Calls the live Gemma model using google-genai SDK or custom APIM endpoint."""
         # Build prompt enforcing JSON structure
         json_prompt = (
             f"{prompt}\n\n"
@@ -308,15 +329,57 @@ class GemmaService:
             "and 'evidence_level' (string)."
         )
 
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=json_prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.3,
-                max_output_tokens=4096
+        # Path A: Custom APIM / OpenAI-Compatible Gateway
+        if self.endpoint:
+            import requests
+            headers = {"Content-Type": "application/json"}
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
+                headers["api-key"] = self.api_key
+                headers["Ocp-Apim-Subscription-Key"] = self.api_key
+
+            payload = {
+                "model": self.model_name,
+                "messages": [{"role": "user", "content": json_prompt}],
+                "temperature": 0.3,
+                "max_tokens": 4096
+            }
+            res = requests.post(f"{self.endpoint.rstrip('/')}/chat/completions", headers=headers, json=payload, timeout=Config.REQUEST_TIMEOUT)
+            if res.status_code == 200:
+                return res.json()["choices"][0]["message"]["content"]
+            else:
+                logger.error(f"APIM Endpoint returned status {res.status_code}: {res.text}")
+                return None
+
+        # Path B: Official Google Gen AI SDK
+        if not self.client:
+            return None
+
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=json_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    max_output_tokens=4096
+                )
             )
-        )
-        return response.text
+            return response.text
+        except Exception as e:
+            logger.warning(f"Error calling model {self.model_name}: {e}. Retrying with compatible Gemma model...")
+            # If model name format is rejected, try gemma-2-27b-it fallback
+            if "not found" in str(e).lower() and self.model_name != "gemma-2-27b-it":
+                fallback_model = "gemma-2-27b-it"
+                response = self.client.models.generate_content(
+                    model=fallback_model,
+                    contents=json_prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.3,
+                        max_output_tokens=4096
+                    )
+                )
+                return response.text
+            raise e
 
     def execute(self, task_type: str, user_input: str, prompt: str, context: Optional[str] = None) -> Dict[str, Any]:
         """

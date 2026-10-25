@@ -2,8 +2,8 @@ import os
 import secrets
 from dotenv import load_dotenv
 
-# Load local environment variables from .env
-load_dotenv()
+# Force reload local environment variables from .env
+load_dotenv(dotenv_path=".env", override=True)
 
 class Config:
     PROJECT_NAME = "MediPulse"
@@ -11,20 +11,39 @@ class Config:
     VERSION = "2.0.0"
 
     # Security & Flask Secret
-    SECRET_KEY = os.getenv("FLASK_SECRET_KEY") or os.getenv("SECRET_KEY") or secrets.token_hex(32)
+    SECRET_KEY = (os.getenv("FLASK_SECRET_KEY") or os.getenv("SECRET_KEY") or secrets.token_hex(32)).strip("\"' \t\r\n")
     MAX_CONTENT_LENGTH = 6 * 1024 * 1024  # 6 MB max request/upload size
     REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "25"))
 
     # AI Model Configuration (Google Gemma as primary model)
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GEMMA_API_KEY") or os.getenv("APIM_API_KEY")
-    GEMMA_MODEL = os.getenv("GEMMA_MODEL") or os.getenv("GEMMA_MODEL_NAME") or "gemma-4-26b-a4b-it"
-    GEMMA_ENDPOINT = os.getenv("GEMMA_ENDPOINT") or os.getenv("APIM_ENDPOINT")
+    GEMINI_API_KEY = (
+        os.getenv("GEMINI_API_KEY")
+        or os.getenv("GEMMA_API_KEY")
+        or os.getenv("GOOGLE_API_KEY")
+        or os.getenv("APIM_API_KEY")
+        or ""
+    ).strip("\"' \t\r\n")
 
-    # Optional Tavily API Key for live web search
-    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+    GEMMA_MODEL = (
+        os.getenv("GEMMA_MODEL")
+        or os.getenv("GEMMA_MODEL_NAME")
+        or "gemma-4-26b-a4b-it"
+    ).strip("\"' \t\r\n")
 
-    # Mock mode flag: active if explicit or if no API key is provided
-    MOCK_AI = os.getenv("MOCK_AI", "").lower() in ("true", "1", "yes") or not bool(GEMINI_API_KEY)
+    GEMMA_ENDPOINT = (
+        os.getenv("GEMMA_ENDPOINT")
+        or os.getenv("APIM_ENDPOINT")
+        or ""
+    ).strip("\"' \t\r\n")
+
+    # Tavily API Key for live medical authority web search
+    TAVILY_API_KEY = (
+        os.getenv("TAVILY_API_KEY")
+        or ""
+    ).strip("\"' \t\r\n")
+
+    # Mock mode flag: active if explicit or if neither key nor endpoint is set
+    MOCK_AI = os.getenv("MOCK_AI", "").lower() in ("true", "1", "yes") or not bool(GEMINI_API_KEY or GEMMA_ENDPOINT)
 
     # Trusted Health Authority Domains Whitelist for Evidence Retrieval
     TRUSTED_HEALTH_DOMAINS = [
